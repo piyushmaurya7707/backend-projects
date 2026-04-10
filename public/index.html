@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>upload your file on server</title>
+    <style>
+
+   body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgb(169, 169, 212);
+            font-family: Arial, sans-serif;
+        }
+
+    
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+     
+
+        button {
+            
+
+            margin-top: 40px;
+            width: 40%;
+            padding: 12px;
+            border: none;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #29b340;
+            
+        }
+        .input-box{
+            color: #151516;
+            background-color: rgb(130, 141, 153);
+            display: flex;
+            width: 300px;
+        }
+        .container{
+            flex-direction: column;
+            background-color: azure;
+            width: 600px;
+            height: 40%;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+    </style>
+</head>
+<body><div class="container">
+       <h1>File upload on local storage using multer</h1>    
+    <form action="/upload" method="post" enctype="multipart/form-data">
+     <input type="file" name="uploadedfile" class="input-box">
+     <button type="submit">upload</button>
+
+    </form>
+    </div>
+</body>
+</html>
