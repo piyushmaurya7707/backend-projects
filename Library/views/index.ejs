@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .issued {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📚 Library Management System</h1>
+
+<h2>All Books</h2>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Pages</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Issue</th>
+        <th>Return</th>
+        <th>Delete</th>
+    </tr>
+
+    <% data.forEach(element => { %>
+        <tr>
+            <td><%= element.bookName %></td>
+            <td><%= element.bookAuthor %></td>
+            <td><%= element.bookPages %></td>
+            <td><%= element.bookPrice %></td>
+
+            <td class="<%= element.bookStatus === 'Available' ? 'available' : 'issued' %>">
+                <%= element.bookStatus %>
+            </td>
+
+            <!-- Issue -->
+            <td>
+                <% if(element.bookStatus === "Available") { %>
+                    <form action="/issue" method="post">
+                        <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                        <button type="submit">Issue</button>
+                    </form>
+                <% } %>
+            </td>
+
+            <!-- Return -->
+            <td>
+                <% if(element.bookStatus === "Issued") { %>
+                    <form action="/return" method="post">
+                        <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                        <button type="submit">Return</button>
+                    </form>
+                <% } %>
+            </td>
+
+            <!-- Delete -->
+            <td>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+    <% }) %>
+</table>
+
+<h2>Add Book</h2>
+
+<form action="/" method="post">
+    <input type="text" placeholder="Book Name" name="bookName" required>
+    <input type="text" placeholder="Book Author" name="bookAuthor" required>
+    <input type="number" placeholder="Pages" name="bookPages" required>
+    <input type="number" placeholder="Price" name="bookPrice" required>
+    <button type="submit">Add Book</button>
+</form>
+
+</body>
+</html>
