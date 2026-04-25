@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <h1>Login</h1>
+
+<input id="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+function login() {
+    fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.token) {
+            alert("Login failed");
+            return;
+        }
+
+        localStorage.setItem('token', data.token);
+
+        // Go to dashboard
+        window.location.href = '/home';
+    })
+    .catch(err => console.log(err));
+}
+</script>
+</body>
+</html>

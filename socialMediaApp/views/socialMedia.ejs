@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Social Media App</title>
+</head>
+<body>
+<h1>Dashboard</h1>
+
+<button onclick="logout()">Logout</button>
+
+<hr>
+
+<h2>Create Post</h2>
+
+<input id="content" placeholder="Write something..." style="width:300px;"><br><br>
+<button onclick="createPost()">Post</button>
+
+<hr>
+
+<h2>All Posts</h2>
+<div id="posts"></div>
+
+<script>
+
+const token = localStorage.getItem('token');
+
+if (!token) {
+    alert("Please login first");
+    window.location.href = '/login';
+}
+
+// LOGOUT
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+}
+
+// LOAD POSTS
+function loadPosts() {
+
+    fetch('/api/posts', {
+        headers: { 'Authorization': token }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const container = document.getElementById('posts');
+        container.innerHTML = '';
+
+        data.forEach(post => {
+    container.innerHTML += `
+        <div style="border:1px solid black; padding:10px; margin:10px;">
+            
+            <p><b>${post.user.username}</b></p>
+            <p>${post.content}</p>
+
+            <p>❤️ ${post.likes.length} likes</p>
+            <button onclick="likePost('${post._id}')">Like</button>
+
+            <h4>Comments:</h4>
+            ${
+                post.comments.map(c => `
+                    <p><b>${c.user.username}</b>: ${c.text}</p>
+                `).join('')
+            }
+
+        </div>
+    `;
+});
+    });
+}
+
+// CREATE POST
+function createPost() {
+    fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            content: document.getElementById('content').value
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        document.getElementById('content').value = '';
+        loadPosts(); // refresh
+    });
+}
+
+// LIKE POST
+function likePost(id) {
+    fetch('/api/posts/like/' + id, {
+        method: 'PUT',
+        headers: {
+            'Authorization': token
+        }
+    })
+    .then(res => res.json())
+    .then(() => loadPosts()); // refresh after like
+}
+
+// LOAD POSTS ON PAGE LOAD
+loadPosts();
+
+</script>
+</body>
+</html>
